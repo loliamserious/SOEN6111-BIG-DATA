@@ -49,27 +49,27 @@ This dataset has been collected across various property aggregators across India
  
  
 
-## Technologies and Algorithms
+### Technologies and Algorithms
 Aiming to research the problems we proposed above, the design of our project includes four parts, which are data exploration, data cleaning, data analysis and modeling training and evaluation respectively.
 
-### Data Explore
+#### Data Explore
 Data exploration is supposed to be completed at first by taking a quick inspection on the description of the dataset and visualizing all the 12 features to extract the features that needed to be cleaned in the following steps. 
 
 The APIs used in this section are mainly Apache Spark library with Dataframe and Seaborn.
 
-### Data Cleaning 
+#### Data Cleaning 
 After completion of data exploration, we could have more information about the dataset. There is no missing value, and the address feature has 6899 distinct values which needed to be cleaned. To clean the address feature, we categorized the address based on different regions. In the following step, we need to transform the quantitative features making them follow the normal distribution, to implement a quick estimation of influence of categorical features on Price with ANOVA test, and encode the categorical features according to ordering based on the mean of Price. 
 
 The APIs we mainly used in this section is Apache Spark Dataframe.
 
-### Data Analysis
+#### Data Analysis
 To solve the first problem, we need to figure out which features will have an important impact on the housing price by calculating the Spearman correlation between price and other features. The reason we choose the spearman correlation is because it picks up relationships between features even when they are non linear. The result of data analysis is illustrated by plotting heatmap and pairplot which is also useful to see how Price compares to each independent feature. 
 
 To solve the second problem, all properties are divided in three price groups: low price, medium price and high price. Then means of quantitative features are compared to figure out the important influencing factors regarding different price groups. 
 
 The APIs used in this section are mainly Spark Dataframe, SciPy and Seaborn. 
 
-### Modeling Training and Evaluation
+#### Modeling Training and Evaluation
 To solve the third problem, there is a need to build a machine learning model to do the prediction of housing price. After the data analysis, it is clear which features should be selected to train the model and which features should be dropped. The algorithm used in the training model is the decision tree which is able to capture non-linear relationships and is interpretable. In order to avoid the effect of data imbalance and take full advantage of our dataset, we will implement the KFold cross validation. The GridSearchCV will be implemented as well to search the best estimator for our problem. Finally, the R2 evaluation method would be used to evaluate the accuracy of the model. 
 
 The APIs we mainly used in this section are Scikit-learn and Dataframe.
