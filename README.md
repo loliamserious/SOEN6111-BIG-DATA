@@ -26,7 +26,7 @@
   The general process is to first check whether the data is missing. If there is a missing value, the missing value must be processed first.Since there are many influencing factors, visual analysis will be carried out next. First, by calculating the correlation of the variables, properly draw the normal probability diagram, the distribution diagram of each quantitative variable, calculate the skewness of the quantitative data, and then perform quantitative feature analysis, specifically including analysis of variance or analysis of variance, and then perform related calculations. Since house prices are divided into three levels: high-medium-low, price breakdowns are needed.
 
 
-## MATERIALS AND METHODS(400 words)
+## MATERIALS AND METHODS
 ### The Dataset
 The open dataset we utilised is from kaggle and the download page is linked below. https://www.kaggle.com/ishandutta/machine-hack-housing-price-prediction
 
