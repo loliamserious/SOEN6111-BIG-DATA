@@ -9,8 +9,10 @@ import pandas as pd
 
 
 
-
 def spearman_corr(dataset):
+    """
+    This function is used to analyze the spearman correlation between each variable and target variable.
+    """
     df_corr = pd.DataFrame()
     df_corr['features'] = dataset.columns
     list_spearman_corr = []
@@ -25,6 +27,10 @@ def spearman_corr(dataset):
 
 
 def pearson_corr_heatmap(spark,dataset):
+    """
+    This function is used to analyze the pearson correlation between each variable including the target variable.
+    Generally to reduce confunding only variables uncorrelated with each other should be added to regression models.
+    """
     assembler = VectorAssembler(inputCols=dataset.columns, outputCol='features', handleInvalid='keep')
     assembled = assembler.transform(dataset)
     pearson_corr = Correlation.corr(assembled, 'features')
@@ -36,13 +42,18 @@ def pearson_corr_heatmap(spark,dataset):
     sns.heatmap(pearson_corr_df.toPandas(), annot=True, yticklabels=pearson_corr_df.columns)
     plt.savefig('pearson_corr_heatmap.png', bbox_inches='tight')
     plt.show()
-    return pearson_corr_df
 
 
 def price_segments(dataset):
-    df_low_price = dataset.filter(dataset['TARGET(PRICE_IN_LACS)'] <= 50)
+    """
+    This function is used to analyze if the correlations shift with change of house price.
+    First, dividing house price into 3 segments: low price, standard price, high price.
+    Then means of quantitative variables are compared among three segments.
+    Finally, plotting 3 figures to illustrate results.
+    """
+    df_low_price = dataset.filter(dataset['TARGET(PRICE_IN_LACS)'] <= 100)
     df_standard_price = dataset.filter(
-        (50 < dataset['TARGET(PRICE_IN_LACS)']) & (dataset['TARGET(PRICE_IN_LACS)'] <= 750))
+        (100 < dataset['TARGET(PRICE_IN_LACS)']) & (dataset['TARGET(PRICE_IN_LACS)'] <= 750))
     df_high_price = dataset.filter(dataset['TARGET(PRICE_IN_LACS)'] > 750)
 
     list_diff_low_stand = []

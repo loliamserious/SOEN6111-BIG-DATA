@@ -15,6 +15,8 @@ def init_spark():
     spark = (
         SparkSession.builder.appName("Housing Price Anslysis")
             .config("spark.default.parallelism", 300)
+            .config("spark.network.timeout", 10000000)
+            .config("spark.executor.heartbeatInterval", 1000000)
             .getOrCreate()
     )
     spark.conf.set("spark.sql.execution.arrow.enabled", "true")
@@ -22,12 +24,19 @@ def init_spark():
 
 
 def check_missing_value(dataset):
+    """
+    This function check if there are missing values in the dataset.
+    """
     dataset.printSchema()
     dataset.describe().show()
     dataset.select(*(sum(col(c).isNull().cast("int")).alias(c) for c in dataset.columns)).show()
 
 
 def visualize_post_by(dataset):
+    """
+    This function is used to visualize the distribution of the variable 'POSTED_BY'
+    and the statistical metrics on variable 'TARGET(PRICE_IN_LACS)'
+    """
     df_posted_by = dataset.groupBy('POSTED_BY').count().toPandas()
     df_posted_by_price = dataset.select('POSTED_BY', 'TARGET(PRICE_IN_LACS)').toPandas()
     f, [ax1, ax2] = plt.subplots(2, 1, figsize=(5, 10))
@@ -44,6 +53,10 @@ def visualize_post_by(dataset):
 
 
 def visualize_under_construction(dataset):
+    """
+    This function is used to visualize the distribution of the variable 'UNDER_CONSTRUCTION'
+    and the statistical metrics on variable 'TARGET(PRICE_IN_LACS)'
+    """
     df_under_construction = dataset.groupBy('UNDER_CONSTRUCTION').count().toPandas()
     df_under_construction_price = dataset.select('UNDER_CONSTRUCTION', 'TARGET(PRICE_IN_LACS)').toPandas()
     f, [ax1, ax2] = plt.subplots(2, 1, figsize=(5, 10))
@@ -60,6 +73,10 @@ def visualize_under_construction(dataset):
 
 
 def visualize_rera(dataset):
+    """
+    This function is used to visualize the distribution of the variable 'RERA'
+    and the statistical metrics on variable 'TARGET(PRICE_IN_LACS)'
+    """
     df_rera = dataset.groupBy('RERA').count().toPandas()
     df_rera_price = dataset.select('RERA', 'TARGET(PRICE_IN_LACS)').toPandas()
     f, [ax1, ax2] = plt.subplots(2, 1, figsize=(5, 10))
@@ -76,6 +93,10 @@ def visualize_rera(dataset):
 
 
 def visualize_bhk_no(dataset):
+    """
+    This function is used to visualize the distribution of the variable 'BHK_NO'
+    and the statistical metrics on variable 'TARGET(PRICE_IN_LACS)'
+    """
     df_bhk_no_price = dataset.select('BHK_NO', 'TARGET(PRICE_IN_LACS)').toPandas()
     f, [ax1, ax2] = plt.subplots(2, 1, figsize=(8, 16))
     sns.countplot(y='BHK_NO', data=df_bhk_no_price, ax=ax1)
@@ -91,6 +112,10 @@ def visualize_bhk_no(dataset):
 
 
 def visualize_bhk_or_rk(dataset):
+    """
+    This function is used to visualize the distribution of the variable 'BHK_OR_RK'
+    and the statistical metrics on variable 'TARGET(PRICE_IN_LACS)'
+    """
     df_bhk_rk = dataset.groupBy('BHK_OR_RK').count().toPandas()
     plt.figure(figsize=(5, 5))
     sns.barplot(x='BHK_OR_RK', y='count', data=df_bhk_rk)
@@ -102,6 +127,10 @@ def visualize_bhk_or_rk(dataset):
 
 
 def visualize_square_ft(dataset):
+    """
+    This function is used to visualize the distribution of the variable 'SQUARE_FT'
+    and the statistical metrics on variable 'TARGET(PRICE_IN_LACS)'
+    """
     df_square_ft = dataset.select('SQUARE_FT', 'TARGET(PRICE_IN_LACS)').toPandas()
     f, [ax1, ax2] = plt.subplots(2, 1, figsize=(8, 12))
     sns.distplot(df_square_ft['SQUARE_FT'], kde=True, ax=ax1)
@@ -116,6 +145,10 @@ def visualize_square_ft(dataset):
 
 
 def visualize_ready_to_move(dataset):
+    """
+    This function is used to visualize the distribution of the variable 'READY_TO_MOVE'
+    and the statistical metrics on variable 'TARGET(PRICE_IN_LACS)'
+    """
     df_ready_move = dataset.groupBy('READY_TO_MOVE').count().toPandas()
     df_ready_move_price = dataset.select('READY_TO_MOVE', 'TARGET(PRICE_IN_LACS)').toPandas()
     f, [ax1, ax2] = plt.subplots(2, 1, figsize=(5, 10))
@@ -132,6 +165,10 @@ def visualize_ready_to_move(dataset):
 
 
 def visualize_resale(dataset):
+    """
+    This function is used to visualize the distribution of the variable 'RESALE'
+    and the statistical metrics on variable 'TARGET(PRICE_IN_LACS)'
+    """
     df_resale = dataset.groupBy('RESALE').count().toPandas()
     df_resale_price = dataset.select('RESALE', 'TARGET(PRICE_IN_LACS)').toPandas()
     f, [ax1, ax2] = plt.subplots(2, 1, figsize=(5, 10))
@@ -148,6 +185,10 @@ def visualize_resale(dataset):
 
 
 def visualize_state(dataset):
+    """
+    This function is used to visualize the distribution of the variable 'state'
+    and the statistical metrics on variable 'TARGET(PRICE_IN_LACS)'
+    """
     df_state_price = dataset.select('state', 'TARGET(PRICE_IN_LACS)').toPandas()
     plt.figure(figsize=(32, 10))
     sns.boxplot(x='state', y='TARGET(PRICE_IN_LACS)', data=df_state_price)
