@@ -51,10 +51,10 @@ def price_segments(dataset):
     Then means of quantitative variables are compared among three segments.
     Finally, plotting 3 figures to illustrate results.
     """
-    df_low_price = dataset.filter(dataset['TARGET(PRICE_IN_LACS)'] <= 1.5)
+    df_low_price = dataset.filter(dataset['TARGET(PRICE_IN_LACS)'] <= 0.3)
     df_standard_price = dataset.filter(
-        (1.5 < dataset['TARGET(PRICE_IN_LACS)']) & (dataset['TARGET(PRICE_IN_LACS)'] <= 5.5))
-    df_high_price = dataset.filter(dataset['TARGET(PRICE_IN_LACS)'] > 5.5)
+        (0.3 < dataset['TARGET(PRICE_IN_LACS)']) & (dataset['TARGET(PRICE_IN_LACS)'] <= 0.7))
+    df_high_price = dataset.filter(dataset['TARGET(PRICE_IN_LACS)'] > 0.7)
 
     list_diff_low_stand = []
     list_diff_low_high = []

@@ -32,17 +32,20 @@ df_dataset = address_to_state(spark, df_dataset)
 visualize_state(df_dataset)
 # Perform log transformation on quantitative features of data before feeding the training model
 df_dataset = log_transform(df_dataset, ['BHK_NO','SQUARE_FT','TARGET(PRICE_IN_LACS)'])
+# Rescaling each feature to a specific range [0, 1]
+df_dataset = scaling(spark, df_dataset, ['BHK_NO','SQUARE_FT','TARGET(PRICE_IN_LACS)'])
+# Encoding categorical features
 df_dataset = one_hot_encoding(df_dataset, 'POSTED_BY')
 df_dataset = one_hot_encoding(df_dataset, 'BHK_OR_RK')
-df_train = one_hot_encoding(df_dataset, 'state')
-df_plot = target_mean_encode(df_dataset,'state','TARGET(PRICE_IN_LACS)')
+df_dataset = target_mean_encode(df_dataset,'state','TARGET(PRICE_IN_LACS)')
 
 # Data analysis
-spearman_corr(df_plot)
-pearson_corr_heatmap(spark, df_plot)
-price_segments(df_plot)
+spearman_corr(df_dataset)
+pearson_corr_heatmap(spark, df_dataset)
+price_segments(df_dataset)
+
 # Drop the features with high similarity with other features
-df_dataset = df_train.drop('READY_TO_MOVE','RK','Owner')
+df_dataset = df_dataset.drop('READY_TO_MOVE','Dealer')
 
 
 

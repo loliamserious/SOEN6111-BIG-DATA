@@ -1,5 +1,7 @@
+from DataExploration import *
 import pyspark.sql.functions as F
 from pyspark.sql.functions import col, sum,split
+from sklearn.preprocessing import MinMaxScaler
 
 
 
@@ -73,3 +75,19 @@ def log_transform(dataset, features):
     for feature in features:
         dataset = dataset.withColumn(feature, F.log(feature))
     return dataset
+
+
+def scaling(spark, dataset, features):
+    """
+    This function is used to scale each feature to a specific range [0, 1]
+    :param spark: spark
+    :param dataset: spark dataframe
+    :param features: quantitative features need to be scaled
+    :return: spark dataframe
+    """
+    spark = init_spark()
+    scaler = MinMaxScaler()
+    pdf_dataset = dataset.toPandas()
+    pdf_dataset[features] = scaler.fit_transform(pdf_dataset[features])
+    df_dataset = spark.createDataFrame(pdf_dataset)
+    return df_dataset
