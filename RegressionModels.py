@@ -1,7 +1,7 @@
 import math
 from pyspark.ml import Pipeline
 from pyspark.ml.regression import RandomForestRegressor, GBTRegressor
-from pyspark.ml.feature import VectorIndexer, VectorAssembler, MinMaxScaler, StandardScaler
+from pyspark.ml.feature import VectorIndexer, VectorAssembler, MinMaxScaler
 from pyspark.ml.evaluation import RegressionEvaluator
 from pyspark.sql.functions import col
 from pyspark.mllib.tree import GradientBoostedTrees, GradientBoostedTreesModel
@@ -19,14 +19,11 @@ def train_rf_model(X_train):
     # Assemble each row of features into a Vector
     assembler = VectorAssembler(inputCols=X_coloums, outputCol='vectoredFeatures')
 
-    # Rescaling each feature to a specific range [0, 1]
-    scaler = MinMaxScaler(inputCol="vectoredFeatures", outputCol="scaledFeatures")
-
     # Train a RandomForest Regression model.
-    rf = RandomForestRegressor(featuresCol="scaledFeatures",labelCol='TARGET(PRICE_IN_LACS)', numTrees=100, seed=42)
+    rf = RandomForestRegressor(featuresCol="vectoredFeatures",labelCol='TARGET(PRICE_IN_LACS)', numTrees=100, seed=42)
 
     # Chain indexer and forest in a Pipeline
-    pipeline_rf = Pipeline(stages=[assembler, scaler, rf])
+    pipeline_rf = Pipeline(stages=[assembler, rf])
 
     # 5-fold and ParamGridMap API:Cross-Validation
     paramGrid_rf = ParamGridBuilder() \
@@ -47,7 +44,7 @@ def train_rf_model(X_train):
 
     # Print the best parameter found by grid search
     best_model_rf = cvModel_rf.bestModel
-    best_model_rf_param = {param[0].name: param[1] for param in best_model_rf.stages[2].extractParamMap().items()}
+    best_model_rf_param = {param[0].name: param[1] for param in best_model_rf.stages[1].extractParamMap().items()}
     print('The best parameter maxDepth = %s' % str(best_model_rf_param.get('maxDepth')))
 
     return best_model_rf
@@ -61,15 +58,12 @@ def train_gbt_model(X_train):
     # Assemble each row of features into a Vector
     assembler = VectorAssembler(inputCols=X_coloums, outputCol='vectoredFeatures')
 
-    # Rescaling each feature to a specific range [0, 1]
-    scaler = MinMaxScaler(inputCol="vectoredFeatures", outputCol="scaledFeatures")
-
     # Gradient-Boosted algorithm comparision
     # Train a GradientBoostedTrees model.
-    gbt = GBTRegressor(featuresCol="vectoredFeatures", labelCol='TARGET(PRICE_IN_LACS)', maxIter=100, seed=42)
+    gbt = GBTRegressor(featuresCol="vectoredFeatures", labelCol='TARGET(PRICE_IN_LACS)', maxIter=5, seed=42)
 
     # Chain indexer and gbt boosted tree in a Pipeline
-    pipeline_gbt = Pipeline(stages=[assembler, scaler, gbt])
+    pipeline_gbt = Pipeline(stages=[assembler, gbt])
 
     # 5-fold and ParamGridMap API:Cross-Validation
     paramGrid_gbt = ParamGridBuilder() \
@@ -90,7 +84,7 @@ def train_gbt_model(X_train):
 
     # Print the best parameter found by grid search
     best_model_gbt = cvModel_gbt.bestModel
-    best_model_gbt_param = {param[0].name: param[1] for param in best_model_gbt.stages[2].extractParamMap().items()}
+    best_model_gbt_param = {param[0].name: param[1] for param in best_model_gbt.stages[1].extractParamMap().items()}
     print('The best parameter maxDepth = %s' % str(best_model_gbt_param.get('maxDepth')))
 
     return best_model_gbt
