@@ -51,15 +51,15 @@ def price_segments(dataset):
     Then means of quantitative variables are compared among three segments.
     Finally, plotting 3 figures to illustrate results.
     """
-    df_low_price = dataset.filter(dataset['TARGET(PRICE_IN_LACS)'] <= 100)
+    df_low_price = dataset.filter(dataset['TARGET(PRICE_IN_LACS)'] <= 1.5)
     df_standard_price = dataset.filter(
-        (100 < dataset['TARGET(PRICE_IN_LACS)']) & (dataset['TARGET(PRICE_IN_LACS)'] <= 750))
-    df_high_price = dataset.filter(dataset['TARGET(PRICE_IN_LACS)'] > 750)
+        (1.5 < dataset['TARGET(PRICE_IN_LACS)']) & (dataset['TARGET(PRICE_IN_LACS)'] <= 5.5))
+    df_high_price = dataset.filter(dataset['TARGET(PRICE_IN_LACS)'] > 5.5)
 
     list_diff_low_stand = []
     list_diff_low_high = []
     list_diff_stand_high = []
-    for c in dataset.columns:
+    for c in dataset.drop('TARGET(PRICE_IN_LACS)').columns:
         rdd_low = df_low_price.select(col(c)).rdd
         avg_low = rdd_low.map(lambda x: x[0]).reduce(lambda x, y: x + y) / rdd_low.count()
         rdd_stand = df_standard_price.select(col(c)).rdd
@@ -71,20 +71,27 @@ def price_segments(dataset):
         list_diff_stand_high.append((avg_stand - avg_high) / avg_high)
 
     diff_low_stand = pd.DataFrame()
-    diff_low_stand['feature'] = dataset.columns
+    diff_low_stand['feature'] = dataset.drop('TARGET(PRICE_IN_LACS)').columns
     diff_low_stand['difference'] = list_diff_low_stand
     diff_low_high = pd.DataFrame()
-    diff_low_high['feature'] = dataset.columns
+    diff_low_high['feature'] = dataset.drop('TARGET(PRICE_IN_LACS)').columns
     diff_low_high['difference'] = list_diff_low_high
     diff_stand_high = pd.DataFrame()
-    diff_stand_high['feature'] = dataset.columns
+    diff_stand_high['feature'] = dataset.drop('TARGET(PRICE_IN_LACS)').columns
     diff_stand_high['difference'] = list_diff_stand_high
-    f, [ax1, ax2, ax3] = plt.subplots(3, 1, figsize=(20, 35))
-    sns.barplot(data=diff_low_stand, x='feature', y='difference', ax=ax1)
-    ax1.set_title('Low Price Vs Standard Price')
-    sns.barplot(data=diff_low_high, x='feature', y='difference', ax=ax2)
-    ax2.set_title('Low Price Vs High Price')
-    sns.barplot(data=diff_stand_high, x='feature', y='difference', ax=ax3)
-    ax3.set_title('High Price Vs Standard Price')
-    plt.savefig('price_segment_analysis.png', bbox_inches='tight')
+    plt.figure()
+    sns.barplot(data=diff_low_stand, x='feature', y='difference')
+    plt.title('Low Price Vs Standard Price')
+    plt.xticks(rotation=90)
+    plt.savefig('low_stand_price.png', bbox_inches='tight')
+    plt.figure()
+    sns.barplot(data=diff_low_high, x='feature', y='difference')
+    plt.title('Low Price Vs High Price')
+    plt.xticks(rotation=90)
+    plt.savefig('low_high_price.png', bbox_inches='tight')
+    plt.figure()
+    sns.barplot(data=diff_stand_high, x='feature', y='difference')
+    plt.title('High Price Vs Standard Price')
+    plt.xticks(rotation=90)
+    plt.savefig('stand_high_price.png', bbox_inches='tight')
     plt.show()
