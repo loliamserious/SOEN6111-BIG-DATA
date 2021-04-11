@@ -60,7 +60,7 @@ def train_gbt_model(X_train):
 
     # Gradient-Boosted algorithm comparision
     # Train a GradientBoostedTrees model.
-    gbt = GBTRegressor(featuresCol="vectoredFeatures", labelCol='TARGET(PRICE_IN_LACS)', maxIter=5, seed=42)
+    gbt = GBTRegressor(featuresCol="vectoredFeatures", labelCol='TARGET(PRICE_IN_LACS)', maxIter=100, seed=42)
 
     # Chain indexer and gbt boosted tree in a Pipeline
     pipeline_gbt = Pipeline(stages=[assembler, gbt])
