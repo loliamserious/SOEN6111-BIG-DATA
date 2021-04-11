@@ -1,5 +1,5 @@
 from DataExploration import *
-from DataCleaning import *
+from DataPreprocessing import *
 from DataAnalysis import *
 from RegressionModels import *
 
@@ -9,7 +9,7 @@ from RegressionModels import *
 
 spark = init_spark()
 
-# Codes for data exploration, cleaning and analysis
+# Codes for data exploration, pre-processing and analysis
 
 df_dataset = spark.read.csv("./data/Train.csv", header="true", inferSchema="true")
 df_dataset.repartition(1000)
@@ -27,22 +27,23 @@ visualize_square_ft(df_dataset)
 visualize_ready_to_move(df_dataset)
 visualize_resale(df_dataset)
 
-# Data cleaning and encoding
+# Data pre-processing and encoding
 df_dataset = address_to_state(spark, df_dataset)
 visualize_state(df_dataset)
-df_dataset = one_hot_encoding(df_dataset, 'POSTED_BY')
-df_dataset = one_hot_encoding(df_dataset, 'BHK_OR_RK')
-df_dataset = one_hot_encoding(df_dataset, 'state')
-
-# Data analysis
-spearman_corr(df_dataset)
-pearson_corr_heatmap(spark, df_dataset)
-price_segments(df_dataset)
-
-# Drop the features with high similarity with other features
-df_dataset = df_dataset.drop('READY_TO_MOVE','RK','Owner')
 # Perform log transformation on quantitative features of data before feeding the training model
 df_dataset = log_transform(df_dataset, ['BHK_NO','SQUARE_FT','TARGET(PRICE_IN_LACS)'])
+df_dataset = one_hot_encoding(df_dataset, 'POSTED_BY')
+df_dataset = one_hot_encoding(df_dataset, 'BHK_OR_RK')
+df_train = one_hot_encoding(df_dataset, 'state')
+df_plot = target_mean_encode(df_dataset,'state','TARGET(PRICE_IN_LACS)')
+
+# Data analysis
+spearman_corr(df_plot)
+pearson_corr_heatmap(spark, df_plot)
+price_segments(df_plot)
+# Drop the features with high similarity with other features
+df_dataset = df_train.drop('READY_TO_MOVE','RK','Owner')
+
 
 
 # Codes for training models and evaluating models
