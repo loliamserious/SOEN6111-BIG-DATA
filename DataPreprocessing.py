@@ -43,8 +43,6 @@ def one_hot_encoding(dataset, feature):
     feature_column = dataset.select(feature).distinct().rdd.flatMap(lambda x: x).collect()
     ohe_feature = [F.when(F.col(feature) == cat, 1).otherwise(0).alias(str(cat)) for cat in feature_column]
     df_dataset = dataset.select(dataset.columns+ohe_feature).drop(feature)
-    column_list = df_dataset.drop('TARGET(PRICE_IN_LACS)').columns + ['TARGET(PRICE_IN_LACS)']
-    df_dataset = df_dataset.select(column_list)
     return df_dataset
 
 
