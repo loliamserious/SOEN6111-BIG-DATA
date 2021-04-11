@@ -9,7 +9,7 @@ from RegressionModels import *
 
 spark = init_spark()
 
-# Codes for data exploration, cleaning and analysis
+# Codes for data exploration, pre-processing and analysis
 
 df_dataset = spark.read.csv("./data/Train.csv", header="true", inferSchema="true")
 df_dataset.repartition(1000)
@@ -27,7 +27,7 @@ visualize_square_ft(df_dataset)
 visualize_ready_to_move(df_dataset)
 visualize_resale(df_dataset)
 
-# Data cleaning and encoding
+# Data pre-processing and encoding
 df_dataset = address_to_state(spark, df_dataset)
 visualize_state(df_dataset)
 # Perform log transformation on quantitative features of data before feeding the training model
