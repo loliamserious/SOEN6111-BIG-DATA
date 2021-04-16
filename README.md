@@ -34,20 +34,21 @@ The open dataset we utilized is from Kaggle, and the download page is linked bel
 This dataset has been collected across various property aggregators across India. The dataset is contained with 29451 rows and 12 columns, providing 12 influencing factors of the housing price, including three categorical features, four boolean features, and five quantitative features.
 
 
- Variable Name             | Type   
- --------                  | :-----------:
- POST_BY                   | Categorical 
- UNDER_CONSTRUCTION        | Boolean 
- RERA                      | Boolean 
- BHK_NO.                   | Real number 
- BHK_OR_RK                 | Categorical
- SQUARE_FT                 | Real number
- READY_TO_MOVE             | Boolean
- RESALE                    | Boolean
- ADDRESS                   | Categorical
- LONGITUDE                 | Real number
- LATITUDE                  | Real number
- TARGET(PRICE_IN_LACS)     | Real number
+   Variable Name             | Type   
+   --------                  | :-----------:
+   POST_BY                   | Categorical 
+   UNDER_CONSTRUCTION        | Boolean 
+   RERA                      | Boolean 
+   BHK_NO.                   | Real number 
+   BHK_OR_RK                 | Categorical
+   SQUARE_FT                 | Real number
+   READY_TO_MOVE             | Boolean
+   RESALE                    | Boolean
+   ADDRESS                   | Categorical
+   LONGITUDE                 | Real number
+   LATITUDE                  | Real number
+   TARGET(PRICE_IN_LACS)     | Real number
+
 <p align="center">
    Table 1. description of the dataset
 </p>
@@ -59,7 +60,7 @@ Aiming to research the problems we proposed above, this project is separated int
 #### A.Data Explore
 The first step is starting with data exploration. We loaded the dataset as a Spark dataframe and took a quick inspection of the description of the dataset. There are no missing values in all 12 features, and one categorical feature "ADDRESS" has high cardinality, which needs to be re-categorized in the pre-processing step. Visualization of all categorical features is presented by plotting histograms illustrating the distribution of each feature and boxplots in Figure 1.  Quantitative features are represented by plotting data and a linear regression model to fit it with the import of seaborn library[1] in Figure 2.
 
-<div align="center"><img src="img/figure1.png"/>
+<div align="center"><img src="img/figure1.png"/></div>
 <p align="center">
    Figure 1. categorical features
 </p>
@@ -81,10 +82,10 @@ After applying Equation (1) to every column of the dataset, the final dataset co
 
 2) Add the feature "state" indicating the address of the house belonging to which state by re-categorizing the feature "ADDRESS." An additional dataset[3] of  529,156 cities in India, including a city's latitude, longitude, and state was joined with our train dataset to generate the corresponding state for each address. Noticeable differences in housing prices across 27 states are visualized in Figure 3.
 
- <div align="center"><img width="400" height="500" src="img/figure3.png"/></div>
-   <p align="center">
-      Figure 3. the state feature
-   </p>
+<div align="center"><img width="400" height="500" src="img/figure3.png"/></div>
+<p align="center">
+   Figure 3. the state feature
+</p>
 
 
 
@@ -132,14 +133,14 @@ The relationship between housing prices and each feature is portrayed in Figure 
 
 The Spearman correlation between housing price and each feature is presented in Figure 4. It shows that "square ft" is the main criterion in establishing house price, and "bedroom numbers," "seller category," and "state" have a considerable influence on housing price. In comparison, a correlation between "resale" and housing prices is very close to zero, and so they are excluded from our estimation.
 
-![image](img/figure4.png)
+<div align="center"><img src="img/figure4.png"/></div>
 <p align="center">
    Figure 4. spearman correlation
 </p>
 
 The Pearson correlation between housing price and each feature is presented in Figure 5. Feature "square ft" has the most significant correlation with housing prices which is 0.58, followed by "bedroom numbers," "posted by dealer," "posted by owner" and "state," which are 0.51, 0.38, -0.36 and 0.35, respectively. In comparison, correlations between features "resale," "under construction," and housing prices are both under 0.05. There are many strong correlations between variables. Ready to move is strongly correlated with under construction. "Posted by dealer" is negatively correlated with "posted by owner."
 
-![image](img/figure5.png)
+<div align="center"><img width="810" height="731" src="img/figure5.png"/></div>
 <p align="center">
    Figure 5. pearson correlation heatmap
 </p>
@@ -151,7 +152,7 @@ All the figures exhibit a similar result presenting the relationship between the
 ### Problem 2: Driven variables of different price groups
 The relationship between selected features and housing prices in three other price groups(low, standard, and high) is portrayed in Figure 6.
 
-![image](img/figure6.png)
+<div align="center"><img src="img/figure6.png"/></div>
 <p align="center">
    Figure 6. price groups comparison
 </p>
@@ -181,7 +182,7 @@ As listed in Table 2, the best results belong to Random Forest Regression for th
  
 Based on our estimation results, Figure 7 portrays the scatterplot of property prices in test data and the predictions. We can see that most of our predictions closely fit the origin testing data in Random Forest Regression, demonstrating that the model fits our data sufficiently well. Most of the time, Gradient-boosted Regression also fits the data very well (see Figure 7). Surprisingly, the model did not deliver promising results on some extreme values in housing prices in which two dots (whose values are smaller than 0.1 for housing prices) are lying far away from the cluster.
 
-![image](img/figure7.png)
+<div align="center"><img src="img/figure7.png"/></div>
 <p align="center">
    Figure 7. predictions of regression models
 </p>
