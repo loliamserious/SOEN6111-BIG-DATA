@@ -33,24 +33,22 @@ The open dataset we utilized is from Kaggle, and the download page is linked bel
 
 This dataset has been collected across various property aggregators across India. The dataset is contained with 29451 rows and 12 columns, providing 12 influencing factors of the housing price, including three categorical features, four boolean features, and five quantitative features.
 
-   |Variable Name             | Type       |
-   |:------------------------ | ----------:|
-   |POST_BY                   | Categorical|
-   |UNDER_CONSTRUCTION        | Boolean    |
-   |RERA                      | Boolean    |
-   |BHK_NO.                   | Real number|
-   |BHK_OR_RK                 | Categorical|
-   |SQUARE_FT                 | Real number|
-   |READY_TO_MOVE             | Boolean    |
-   |RESALE                    | Boolean    |
-   |ADDRESS                   | Categorical|
-   |LONGITUDE                 | Real number|
-   |LATITUDE                  | Real number|
-   |TARGET(PRICE_IN_LACS)     | Real number|
+|Variable Name             | Type       |
+|------------------------  | ----------:|
+|POST_BY                   | Categorical|
+|UNDER_CONSTRUCTION        | Boolean    |
+|RERA                      | Boolean    |
+|BHK_NO.                   | Real number|
+|BHK_OR_RK                 | Categorical|
+|SQUARE_FT                 | Real number|
+|READY_TO_MOVE             | Boolean    |
+|RESALE                    | Boolean    |
+|ADDRESS                   | Categorical|
+|LONGITUDE                 | Real number|
+|LATITUDE                  | Real number|
+|TARGET(PRICE_IN_LACS)     | Real number|
 
-<p align="center">
-   Table 1. description of the dataset
-</p>
+  Table 1. description of the dataset
  
 
 ### Technologies and Algorithms
@@ -75,9 +73,13 @@ The first step is starting with data exploration. We loaded the dataset as a Spa
 Below are a few feature engineering processes which were done: cleaning, re-categorization, log transformation, normalization, and encoding on the dataset.
 
 1) The feature "SQUARE_FT" has few univariate data exceeding  30000.0ft which skews an existing statistical relationship[2]. Through Inter-Quartile Range (IQR), an outlier x can be detected if: 
-x < Q1 − 1.5 · IQR OR Q3 + 1.5 · IQR < x (1) 
-where: Q1 = 25th percentiles  Q3 = 75th percentiles   IQR = Q3 − Q1 
-After applying Equation (1) to every column of the dataset, the final dataset contains 29272 rows.
+   <p align="center">
+      x < Q1 − 1.5 * IQR OR Q3 + 1.5 * IQR < x (1)
+   </p>
+   
+   where: Q1 = 25th percentiles  Q3 = 75th percentiles   IQR = Q3 − Q1 
+   
+   After applying Equation (1) to every column of the dataset, the final dataset contains 29272 rows.
 
 2) Add the feature "state" indicating the address of the house belonging to which state by re-categorizing the feature "ADDRESS." An additional dataset[3] of  529,156 cities in India, including a city's latitude, longitude, and state was joined with our train dataset to generate the corresponding state for each address. Noticeable differences in housing prices across 27 states are visualized in Figure 3.
 
