@@ -7,7 +7,7 @@
 
 ## INTRODUCTION
 ### Context
-  Buyers not only care about the size of the house (square feet), but various other factors play a key role in determining the price of the house/property. Finding the correct set of attributes to help understand buyer behavior can be very difficult. The data set has collected data from various real estate dealers in India. The data set provides 11 influencing factors and accurately predicts house prices through modeling.
+  Buyers not only care about the size of the house (square feet), but various other factors play a key role in determining the price of the house/property. Finding the correct set of attributes to help understand buyer behavior can be very difficult. The data set has collected data from various real estate dealers in India. The data set provides 12 influencing factors and accurately predicts house prices through modeling.
   
 ### Objectives
   In real life, we often encounter the problem of classification and prediction. The target variable value is usually affected by multiple factors, and different factors have different effects on the target variable, so the weight will be different. Some factors are high, and some factors have a small weight. We usually use known factors to predict the value of the target variable.
@@ -33,21 +33,20 @@ The open dataset we utilized is from Kaggle, and the download page is linked bel
 
 This dataset has been collected across various property aggregators across India. The dataset is contained with 29451 rows and 12 columns, providing 12 influencing factors of the housing price, including three categorical features, four boolean features, and five quantitative features.
 
-
-   Variable Name             | Type   
-   --------                  | :-----------:
-   POST_BY                   | Categorical 
-   UNDER_CONSTRUCTION        | Boolean 
-   RERA                      | Boolean 
-   BHK_NO.                   | Real number 
-   BHK_OR_RK                 | Categorical
-   SQUARE_FT                 | Real number
-   READY_TO_MOVE             | Boolean
-   RESALE                    | Boolean
-   ADDRESS                   | Categorical
-   LONGITUDE                 | Real number
-   LATITUDE                  | Real number
-   TARGET(PRICE_IN_LACS)     | Real number
+   |Variable Name             | Type       |
+   |:------------------------ | ----------:|
+   |POST_BY                   | Categorical|
+   |UNDER_CONSTRUCTION        | Boolean    |
+   |RERA                      | Boolean    |
+   |BHK_NO.                   | Real number|
+   |BHK_OR_RK                 | Categorical|
+   |SQUARE_FT                 | Real number|
+   |READY_TO_MOVE             | Boolean    |
+   |RESALE                    | Boolean    |
+   |ADDRESS                   | Categorical|
+   |LONGITUDE                 | Real number|
+   |LATITUDE                  | Real number|
+   |TARGET(PRICE_IN_LACS)     | Real number|
 
 <p align="center">
    Table 1. description of the dataset
@@ -82,7 +81,7 @@ After applying Equation (1) to every column of the dataset, the final dataset co
 
 2) Add the feature "state" indicating the address of the house belonging to which state by re-categorizing the feature "ADDRESS." An additional dataset[3] of  529,156 cities in India, including a city's latitude, longitude, and state was joined with our train dataset to generate the corresponding state for each address. Noticeable differences in housing prices across 27 states are visualized in Figure 3.
 
-<div align="center"><img width="400" height="500" src="img/figure3.png"/></div>
+<div align="center"><img width="600" height="750" src="img/figure3.png"/></div>
 <p align="center">
    Figure 3. the state feature
 </p>
