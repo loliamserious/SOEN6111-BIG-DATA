@@ -1,34 +1,14 @@
-# SOEN6111-BIG-DATA Project
-# Housing Price Analysis and Prediction in India
-## ABSTRACT
-   In order to find the correlation between housing prices in various countries, geographic location, housing quality, and other factors, this project uses Indian housing prices as an entry point, focusing on the analysis of the relationship between Indian housing prices and various dimensions, focusing on the important reasons for the impact on housing prices. After data processing and the relationship of dependent variables are summarized, it is found that there is a great correlation between room size, geographic location, number of bedrooms, sellers and Indian house prices, and shows a positive correlation trend. Dividing the prices of Indian houses into high, middle and low categories, the analysis found that the important factors affecting the high housing prices are determined jointly by the housing developer and the owner of the house. Finally, in order to be able to predict the house price in India conveniently, two algorithms of  random forest and GBT are used to model and predict house prices. After grid adjustment, it is found that the random forest algorithm predicts house prices with the optimal parameters The accuracy is the highest and the prediction error is the smallest. Generally speaking, there are many factors related to housing prices. The model can be used to reduce the selection and analysis process of buyers and obtain a better research experience. At the same time, it also brings selective reference value for developers and other sellers to lead housing prices.
-   
-   The data for this project comes from Kaggle, in which data from recent years is selected for this project. The data set provides 12 influencing factors. Therefore, when predicting the current Indian housing prices, this project should also consider the impact on Indian housing prices from the aspects of address, square, longitude, under construction, resale or not, etc. The primary project process is data processing, visual analysis and modeling prediction.
-
-## INTRODUCTION
-### Context
-  Buyers not only care about the size of the house (square feet), but various other factors play a key role in determining the price of the house/property. Finding the correct set of attributes to help understand buyer behavior can be very difficult. The data set has collected data from various real estate dealers in India. The data set provides 12 influencing factors and accurately predicts house prices through modeling.
-  
-### Objectives
-  In real life, we often encounter the problem of classification and prediction. The target variable value is usually affected by multiple factors, and different factors have different effects on the target variable, so the weight will be different. Some factors are high, and some factors have a small weight. We usually use known factors to predict the value of the target variable.
-  
-  House prices are affected by many factors, such as address, area, and availability of immediate check-in. So we use big data analysis to get the trend of housing prices and the main factors affecting housing prices, and then we can be more familiar with the needs of buyers and the Indian housing market.
-
-### The Problem to Solve
-  1.What factors influence the price of houses?
-  
-  2.Dividing housing price data into three price levels(high-medium-low)，studing the impact of influencing factors on housing prices at different levels.
-  
-  3.The prediction of housing price in India in the future.
-   
-### Related Work
-  The research on housing price forecasting in recent years found that dealing with housing price forecasting problems generally starts from the analysis of the influencing factors of housing price. Housing price analysis has a long history. Bensen used multiple regression method to predict housing price in 1997, and Malpezzi in 1999 Using time series cross-section regression to analyze housing prices, Song used GIS to extract influencing factors and then constructed a characteristic price model to analyze housing prices. The current trend is also the method of this project as follows:
-  
-  The general process is to first check whether the data is missing. If there is a missing value, the missing value must be processed first.Since there are many influencing factors, visual analysis will be carried out next. First, by calculating the correlation of the variables, properly draw the normal probability diagram, the distribution diagram of each quantitative variable, calculate the skewness of the quantitative data, and then perform quantitative feature analysis, specifically including analysis of variance or analysis of variance, and then perform related calculations. Since house prices are divided into three levels: high-medium-low, price breakdowns are needed.
+# Indian Housing Price Analysis and Prediction
+## Overview
+* Analyzed 29451 lines of data and 12 influencing factors of Indian housing prices to help understand buyer behaviors through exploratory data analysis (EDA)
+* Forecasted Indian housing price with 0.05 RMSE and 64.3% R2 through implementation of random forest regressor and gradient-boosted regressor
+* Extracted meaningful information from data through visualization of distribution and calculation of correlation using python, PySpark and pandas 
+* Engineered features put on knowing inter-quartile range (IQR), PySpark, transformation, normalization, encoding and sklearn
+* Optimized random forest regression and gradient-boosted regression model using GridsearchCV to reach the final result
 
 
-## MATERIALS AND METHODS
-### The Dataset
+
+## The Dataset
 The open dataset we utilized is from Kaggle, and the download page is linked below: https://www.kaggle.com/ishandutta/machine-hack-housing-price-prediction
 
 This dataset has been collected across various property aggregators across India. The dataset is contained with 29451 rows and 12 columns, providing 12 influencing factors of the housing price, including three categorical features, four boolean features, and five quantitative features.
@@ -51,10 +31,8 @@ This dataset has been collected across various property aggregators across India
   Table 1. description of the dataset
  
 
-### Technologies and Algorithms
-Aiming to research the problems we proposed above, this project is separated into four components, which are 1)data exploration, 2)data pre-processing, 3)data analysis, 4) training two different regression models and investigating differences between them.
 
-#### A.Data Explore
+## Data Explore
 The first step is starting with data exploration. We loaded the dataset as a Spark dataframe and took a quick inspection of the description of the dataset. There are no missing values in all 12 features, and one categorical feature "ADDRESS" has high cardinality, which needs to be re-categorized in the pre-processing step. Visualization of all categorical features is presented by plotting histograms illustrating the distribution of each feature and boxplots in Figure 1.  Quantitative features are represented by plotting data and a linear regression model to fit it with the import of seaborn library[1] in Figure 2.
 
 <div align="center"><img src="img/figure1.png"/></div>
@@ -69,7 +47,7 @@ The first step is starting with data exploration. We loaded the dataset as a Spa
 
 
 
-#### B.Data Pre-processing 
+## Data Pre-processing 
 Below are a few feature engineering processes which were done: cleaning, re-categorization, log transformation, normalization, and encoding on the dataset.
 
 1) The feature "SQUARE_FT" has few univariate data exceeding  30000.0ft which skews an existing statistical relationship[2]. Through Inter-Quartile Range (IQR), an outlier x can be detected if: 
@@ -100,39 +78,10 @@ After feature engineering, the final dataset contains 29272 rows with 13 feature
 
 
 
-#### C.Data Analysis
+## Data Analysis
 Exploratory data analysis is an essential step before building a regression model. In this way, researchers can discover the implicit patterns of the data, which in turn helps choose appropriate machine learning approaches[6].
 
-For solving the first problem, Spearman's correlation and Pearson's correlation between housing price and other variables are measured to inspect the impact of each variable on housing price. 
-
-We divided housing prices into three segments for solving the second problem: low price, standard price, and high price. The measurement of differences in each quantitative feature of three price groups allows us to analyze if the correlations shift with the change of housing price. The results of data analysis are demonstrated by heatmap, histograms with the utilization of seaborn library in the result section.
- 
-
-
-#### D.Modeling Training and Evaluation
-Solving the third problem shows that the regression model in machine learning is an appropriate approach to forecast the housing price in our project. We chose random forest regression and gradient-boosted tree regression as our training models. Then the dataset was randomly split data into training and testing sets with a ratio of 4:1 by utilizing the scikit-learn package.
-
-##### Random Forest Regression
-Random Forest is one of the tree-based ensemble models that combines the prediction of multiple deep independent trees to create a more accurate final forecast. Previous studies[7] verified that Random Forest is a powerful tool. In our project, we used the RandomForestRegression class provided by pyspark. The RandomForestRegression has a "numTrees" parameter indicating how many trees to build, which we set at 100. 
-
-Random forest was proposed by LeoBreiman (2001). It uses bootstrap resampling technology to randomly select k samples from the original training sample set N with replacement to generate a new training sample set, and then generate a new training sample set based on the self-service sample set. K classification trees form a random forest, and the classification result of the new data is determined by the score formed by how many classification trees vote. Its essence is an improvement to the decision tree algorithm. Multiple decision trees are merged together. The establishment of each tree depends on an independently sampled sample[10]. Each tree in the forest has the same distribution, and the classification error depends on each tree. The classification ability of a tree and the correlation between them. Feature selection uses a random method to split each node, and then compares the errors generated in different situations[10]. The detectable inherent estimation error, classification ability and correlation determine the number of selected features. The classification ability of a single tree may be small, but after a large number of decision trees are randomly generated, a test sample can select the most probable classification based on the classification results of each tree.
-
-In the process of building each decision tree, there are two points to pay attention to sampling and complete splitting. The first is two random sampling processes. Random Forest samples the input data in rows and columns. For row sampling, a replacement method is used, that is, there may be duplicate samples in the sample set obtained by sampling. Assuming that the number of input samples is N, then the number of samples sampled is also N. In this way, when training, the input samples of each tree are not all samples, making it relatively difficult to over-fitting. Then perform column sampling, from M features, select m (m << M). After that, the decision tree is built using a complete split method for the sampled data, so that a certain leaf node of the decision tree cannot continue to split, or all the samples in it point to the same category. In general, many decision tree algorithms have an important step-pruning, but this is not done here. Since the previous two random sampling processes ensure randomness, even if there is no pruning, there will be no over-fitting.
-
-
-##### Gradient-boosted Regression			
-Gradient boosted Regression builds an ensemble of shallow and weak successive trees with each tree learning and improving on the previous. Gradient boosted Regression as a leading method for winning Kaggle competitions has generated a significant impact and has been widely recognized in many domains[8]. In our project, we utilized the GradientBoostedRegressor from pyspark. After tweaking the GradientBoostedRegressor model multiple times, we set the parameter "maxIter" at 100. When the loss function is a general function, it is often not easy to optimize each step. In response to this problem, Freidman proposed the Gradient Boosting Tree Algorithm (GBT). One of the core ideas of the gradient boosting tree (GBT) is to use the value of the negative gradient of the loss function in the current model as an approximation of the residual. In essence, it is to perform a first-order Taylor expansion of the loss function to fit a regression tree.
-
-We implemented a pipeline for each regression model consisting of a vector assembler and a regression model tuned by model selection via 5-fold cross-validation and a hyperparameter search of parameter "maxDepth'' from a range[8,10,12,15]. Then, we compared all these models, selected the best one, trained it on the training set, and then evaluated it on the test set[9].
-
-Trained models are evaluated on testing sets measured on R2, RMSE and MSE indicators, and the result of evaluations is recorded and analyzed. A comparison on model performances between random forest regression and gradient-boosted Regression is made in the following section.
-
-Code is available at https://github.com/loliamserious/SOEN6111-BIG-DATA
-
-
-
-## RESULTS
-### Problem 1: Influential factors of housing price
+### Influential factors of housing price
 The relationship between housing prices and each feature is portrayed in Figure 4 and Figure 5. 
 
 The Spearman correlation between housing price and each feature is presented in Figure 4. It shows that "square ft" is the main criterion in establishing house price, and "bedroom numbers," "seller category," and "state" have a considerable influence on housing price. In comparison, a correlation between "resale" and housing prices is very close to zero, and so they are excluded from our estimation.
@@ -151,9 +100,9 @@ The Pearson correlation between housing price and each feature is presented in F
 
 All the figures exhibit a similar result presenting the relationship between the features and the housing prices. We could infer that "square ft," "bedroom number," "posted by dealer," "posted by owner" and "state" are influential factors of housing prices in India.
 
+### Driven variables of different price groups
+We divided housing prices into three segments for solving the second problem: low price, standard price, and high price. The measurement of differences in each quantitative feature of three price groups allows us to analyze if the correlations shift with the change of housing price. The results of data analysis are demonstrated by heatmap, histograms with the utilization of seaborn library in the result section.
 
-
-### Problem 2: Driven variables of different price groups
 The relationship between selected features and housing prices in three other price groups(low, standard, and high) is portrayed in Figure 6.
 
 <div align="center"><img src="img/figure6.png"/></div>
@@ -165,7 +114,21 @@ All the figures illustrate the difference of means of quantitative variables bet
 
 
 
-### Problem 3: Price Forecasting
+## Modeling Training and Evaluation
+Solving the third problem shows that the regression model in machine learning is an appropriate approach to forecast the housing price in our project. We chose random forest regression and gradient-boosted tree regression as our training models. Then the dataset was randomly split data into training and testing sets with a ratio of 4:1 by utilizing the scikit-learn package.
+
+* Random Forest Regression: In our project, we used the RandomForestRegression class provided by pyspark. The RandomForestRegression has a "numTrees" parameter indicating how many trees to build, which we set at 100. 
+
+
+* Gradient-boosted Regression: In our project, we utilized the GradientBoostedRegressor from pyspark. After tweaking the GradientBoostedRegressor model multiple times, we set the parameter "maxIter" at 100. 
+
+We implemented a pipeline for each regression model consisting of a vector assembler and a regression model tuned by model selection via 5-fold cross-validation and a hyperparameter search of parameter "maxDepth'' from a range[8,10,12,15]. Then, we compared all these models, selected the best one, trained it on the training set, and then evaluated it on the test set[9].
+
+Trained models are evaluated on testing sets measured on R2, RMSE and MSE indicators, and the result of evaluations is recorded and analyzed. A comparison on model performances between random forest regression and gradient-boosted Regression is made in the following section.
+
+Code is available at https://github.com/loliamserious/SOEN6111-BIG-DATA
+
+### Price Forecasting
 Many iterations of performance tuning were done to find the optimal solution for each model. Random Forest Regression, Gradient-boosted Regression were intensively tuned grid search provided by pyspark to achieve the results listed in Table 2.
 
 |           Model             |R2 train|R2 test |  RMSE   |  MSE   |Best maxDepth|
